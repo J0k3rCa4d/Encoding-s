@@ -9,26 +9,24 @@ namespace EncodingsFun
         static void Main(string[] args)
         {
             byte[] bytes = new byte[] {0b0000_0001};
-            //TODO 
-            // UTF8 - 1-4 bytes encoding 
-            // C# int16 (default is 32 ) 1-4 byte
-            // Print table of all existing characters usign int16
+            Encoding utf8 = Encoding.Unicode;
 
             var parameter = args.ToList().FirstOrDefault() ?? "0";
-            var unicodeLastCharacter_Decimal = Int16.Parse(parameter);
-            var unicodeLastCharacter_ByteArray = BitConverter.GetBytes(unicodeLastCharacter_Decimal);
-            var unicodeLastCharacter_Hex = $"0x{unicodeLastCharacter_Decimal:X}";
-            var unicodeLastCharacter_Char = UnicodeEncoding.Unicode.GetChars(bytes,0,1);
+            Console.WriteLine($"--------------\nValue {parameter} in:\n--------------");
+            
+            var u_int16 = Int16.Parse(parameter);                // Two bytes ex. 255 255 = FF FF Unicode is char = 2 bytes
+            var u_ByteArray = BitConverter.GetBytes(u_int16);    // Int16 to Array of bytes
+            var u_Chars = utf8.GetChars(u_ByteArray);
 
-            var characters = "hello";
-            var numberRepresentationOfString = System.Text.UnicodeEncoding.UTF8.GetBytes(characters);
-
-
-            Console.WriteLine($"{characters} -> {String.Join(' ',numberRepresentationOfString)}");
-            Console.WriteLine($"INT:{unicodeLastCharacter_Decimal}"+ Environment.NewLine +
-            $@" -> BYTES:   [ {String.Join(' ',unicodeLastCharacter_ByteArray)} ]"+ Environment.NewLine +
-            $@" -> HEX  :   [ {String.Join(' ',unicodeLastCharacter_Hex)} ]"+ Environment.NewLine +
-            $@" -> Unicode: [ {String.Join(' ',unicodeLastCharacter_Char)} ]");
+            Console.WriteLine(
+                $"-> Int:   {u_int16}\n\r"+
+                $"-> Hex:   {u_int16:X2}\n\r"+
+                $"-> Bytes: {String.Join(' ', u_ByteArray)}\n\r"+
+                $"-> Chars: {new String(u_Chars)}"
+            );
+                             
+            //DifferentTypesOfEncodings.Run();
+            //UnicodeEncodingDecoding.Run();
         }
     }
 }
